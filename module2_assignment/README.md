@@ -1,3 +1,4 @@
+  *Differential Drive : Drive to goal using two steps* <p>
 ![Alt Text](../Documentation/Images/diff_drive.gif)<p>
   *Differential Drive : Drive to goal using two steps* <p>
 ![Alt Text](../Documentation/Images/closest_point.gif)<p>
