@@ -61,7 +61,7 @@ Wall {
 Pioneer3dx {
   translation -1 2 0.0975
   rotation 0 0 -1 3.1415923071795864
-  controller "proxy_controller"
+  controller "diff_drive"
   extensionSlot [
     SickLms291 {
       translation 0.08 0 0.21
