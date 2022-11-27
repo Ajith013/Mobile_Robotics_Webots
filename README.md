@@ -1,5 +1,5 @@
 
-# Mobile robotics using webots simulator\
+# Mobile robotics using webots simulator
   Differential Drive : Drive to goal using two steps\
   [Click for the controller code](module2_assignment/controllers/diff_drive/diff_drive.py)\
 ![Alt Text](Documentation/Images/diff_drive.gif)\
