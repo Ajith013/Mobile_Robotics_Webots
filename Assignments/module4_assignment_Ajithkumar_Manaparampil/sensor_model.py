@@ -23,10 +23,10 @@ def distance_to_closest_intersection(x, y, theta, circles):
         x0 = -a*c/(a*a+b*b)
         y0 = -b*c/(a*a+b*b)
         d0 = abs(c)/math.sqrt(a*a+b*b)
-        if d0 > r: 
+        if d0 > r: #c*c > (r*r*(a*a+b*b)+EPS)
             #print("No points")
             distance.append(float('inf'))
-        elif d0 == r :
+        elif d0 == r :#abs (c*c - r*r*(a*a+b*b)) < EPS:
             #print("One point")
             dist = math.sqrt((x0+p)*(x0+p) + (y0+q)*(y0+q))
             distance.append(dist)
