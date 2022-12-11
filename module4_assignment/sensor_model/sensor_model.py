@@ -41,7 +41,7 @@ def distance_to_closest_intersection(x, y, theta, circles):
             #Check if the x co ordinate is in from of the robot x pose and
             #also check if the x co ordinate lie in the same quadrant as the obstacle
             if ax+p <= 0 and np.sign(theta) != np.sign(ay+q):
-                print("Not in front of the beam")
+                pass
             else:
                 dist1 = math.sqrt((ax+p)*(ax+p) + (ay+q)*(ay+q))
                 dist2 = math.sqrt((bx+p)*(bx+p) + (by+q)*(by+q))
@@ -70,7 +70,16 @@ returns the probability of the scan according to the simplified beam-based model
 """
 def beam_based_model(z_scan, z_scan_exp, b, z_max):
     # your implementation goes here
-    return 0.0
+    prob_array_individual = [0.0] * len(z_scan)
+    for i in range(0,len(z_scan)):
+        if z_scan[i] > z_max:
+            prob_array_individual[i] = 1
+        else:
+            n_ = normalizer(z_scan_exp[i],b,z_max)
+            prob_array_individual[i] = n_ * (1/(math.sqrt(2*np.pi*b))) * math.exp((-1/2)*(1/b)*(math.pow(z_scan[i] - z_scan_exp[i],2)))
+    print(prob_array_individual)
+    prob_scan = np.prod(prob_array_individual)
+    return prob_scan
 
 
 def main():
