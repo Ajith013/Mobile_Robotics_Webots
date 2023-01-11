@@ -1,0 +1,53 @@
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/adept/pioneer3/protos/Pioneer3dx.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/devices/sick/protos/SickLms291.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/obstacles/protos/OilBarrel.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5922001253276656 0.5897159272490443 0.5491212404475873 2.1407991655995913
+  position -0.14317552977512926 0.7151011425083702 9.816138331207117
+}
+TexturedBackground {
+  luminosity 0
+  skybox FALSE
+}
+TexturedBackgroundLight {
+  castShadows FALSE
+}
+DEF RectangleArena RectangleArena {
+  floorSize 5 5
+  floorTileSize 2 2
+  wallHeight 0.5
+}
+DEF Pioneer3dx Pioneer3dx {
+  translation 0.788781 1.07183 0.0975
+  rotation 0 0 -1 2.87979
+  controller "pf_controller"
+  supervisor TRUE
+  extensionSlot [
+    SickLms291 {
+      translation 0 0 0.21
+      noise 0.1
+      resolution 11
+    }
+  ]
+}
+DEF Obs_1 OilBarrel {
+  translation 1.12054 -1.1765 0.44
+  name "oil barrel_1"
+  radius 0.5
+}
+DEF Obs_2 OilBarrel {
+  name "oil barrel_2"
+}
+DEF Obs_3 OilBarrel {
+  translation 1.79408 1.48099 0.44
+  rotation 0 0 1 -2.8797953071795863
+  name "oil barrel_3"
+}
