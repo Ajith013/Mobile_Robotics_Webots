@@ -304,7 +304,8 @@ def distance_to_closest_border(x, y, theta, map_limits):
     distance = math.sqrt((rb[0] - x)**2 + (rb[1] - y)**2)
     
     print(distance)
-    return float('inf')
+    #float('inf')
+    return distance
 
 
 # Returns the expected range measurements for all beams
