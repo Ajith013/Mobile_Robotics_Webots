@@ -437,8 +437,8 @@ def resample_particles(particles, weights):
     M_inv = 1/M
     r = np.random.uniform(0,M_inv,1)
     c = weights[0]
-    i = 1
-    for m in range(1,M):
+    i = 0
+    for m in range(0,M):
         u = r + (m - 1)*M_inv
         while u > c:
             i = i + 1
