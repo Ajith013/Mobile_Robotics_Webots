@@ -430,9 +430,23 @@ def initialize_particles(num_particles, map_limits):
 # it was sampled.
 def resample_particles(particles, weights):
     # replace with your code
-    new_particles = particles
-    new_weights = weights
-
+    new_particles = []
+    new_weights = []
+    
+    M = len(particles)
+    M_inv = 1/M
+    r = np.random.uniform(0,M_inv,1)
+    c = weights[0]
+    i = 1
+    for m in range(1,M):
+        u = r + (m - 1)*M_inv
+        while u > c:
+            i = i + 1
+            c = c + weights[i]
+        new_particles.append(particles[i])
+        new_weights.append(weights[i])
+    #new_particles = particles
+    #new_weights = weights
     return new_particles, new_weights
 
 
