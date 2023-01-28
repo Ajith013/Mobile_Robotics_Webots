@@ -137,6 +137,33 @@ def get_pose_delta(last_pose, curr_pose):
 
 # Returns the odometry measurement between two poses
 # according to the odometry-based motion model.
+def get_robot_displacement(lastpsValues,psValues, R,L ):
+    dis_values = [0,0]
+    for i in range(2):
+      diff = psValues[i] - lastpsValues[i]
+      if diff < 0.001:
+        diff=0.0
+        psValues[i] = lastpsValues[i]
+      dis_values[i] = diff * R 
+    # Updates robot pose based on heading and displacement
+    lin_disp  = (dis_values[0]+dis_values[1])/2.0
+    ang_disp  = (dis_values[0]-dis_values[1])/L
+
+    return lin_disp, ang_disp
+
+def get_robot_pose(lin_disp, ang_disp, robot_pose):
+    # Compute robot new position
+    """print("In function")
+    print(lin_disp)
+    print(ang_disp)
+    print(robot_pose)"""
+    robot_pose[2] += ang_disp
+    robot_pose[2] = normalize_angle(robot_pose[2])
+    robot_pose[0] += lin_disp * math.cos(robot_pose[2])
+    robot_pose[1] += lin_disp * math.sin(robot_pose[2])
+
+    return robot_pose
+
 def get_odometry(last_pose, curr_pose):
     x = last_pose[0]
     y = last_pose[1]
@@ -282,8 +309,8 @@ def distance_to_closest_border(x, y, theta, map_limits):
     
     
     angles = angle_rb_mp(rb, mp_pt)
-    print(theta)
-    print(angles)
+    #print(theta)
+    #print(angles)
     wall_dict = {
     "1" : [mp_pt[0],mp_pt[3]],
     "5" : [mp_pt[0],mp_pt[3]],
@@ -293,9 +320,9 @@ def distance_to_closest_border(x, y, theta, map_limits):
     }
     
     bins = [-4] + angles + [4]
-    print(bins)
+    #print(bins)
     dict_val = str(np.digitize(angle,bins))
-    print(dict_val)
+    #print(dict_val)
     
     line1 = wall_dict[dict_val]
     line2 = [(rb[0], rb[1]), (rb[0] + 5*math.cos(angle), rb[1] + 5*math.sin(angle))]
@@ -303,7 +330,7 @@ def distance_to_closest_border(x, y, theta, map_limits):
     x,y = line_intersection(line1, line2)
     distance = math.sqrt((rb[0] - x)**2 + (rb[1] - y)**2)
     
-    print(distance)
+    #print(distance)
     #float('inf')
     return distance
 
@@ -313,8 +340,8 @@ def distance_to_closest_border(x, y, theta, map_limits):
 # and the map, described by circles and map_limits
 def get_z_exp(x, y, theta_rob, n_beams, z_max, circles, map_limits):
     beam_directions = norm_angle_arr(np.linspace(-np.pi/2, np.pi/2, n_beams) + theta_rob)
-    print("Beam Directions")
-    print(len(beam_directions))
+    #print("Beam Directions")
+    #print(len(beam_directions))
     z_exp = []
     for theta in beam_directions:
         dist = distance_to_closest_circle(x, y, theta, circles)
@@ -439,7 +466,7 @@ def resample_particles(particles, weights):
     c = weights[0]
     i = 0
     for m in range(0,M):
-        u = r + (m - 1)*M_inv
+        u = r + (m-1)*M_inv
         while u > c:
             i = i + 1
             c = c + weights[i]
@@ -455,6 +482,21 @@ def resample_particles(particles, weights):
 # Returns the new set of particles
 def add_random_particles(particles, weights, map_limits):
     # your code here
+        # your code here
+    print("In function: add_random_particles")
+    len_weights = len(weights)
+
+    #sorting particles according to weights:
+    particles = [i for _, i in sorted(zip(weights, particles))]
+
+    if len_weights%2 == 0:
+        for a in range(int(len_weights/2)):
+            particles[a] = sample_random_particle(map_limits)
+
+    else:
+        for a in range((int(len_weights/2))-1):
+            particles[a] = sample_random_particle(map_limits)
+    
     return particles
 
 
@@ -525,19 +567,80 @@ def main():
     last_pose = get_curr_pose(trans_field, rot_field)
     # translation threshold for odometry calculation
     trans_thr = 0.1
-
+    
+    #Variables for getting odometry value from sensor data
+    #radius
+    """ R= 0.195 /2.0
+    #distance between the wheels
+    L= 0.34
+    # robot pose
+    robot_pose = [0,0,0]
+    #robot_pose = get_curr_pose(trans_field, rot_field)
+    #last_pose= [0,0,0]
+    encoder_unit = 2*3.14* R / 6.28
+    psValues = [0,0]
+    lastpsValues = [0,0]
+    dis_values= [0,0]
+    
+    psValues[0] = leftSensor.getValue()
+    psValues[1] = rightSensor.getValue()
+    [lin_disp, ang_disp] = get_robot_displacement(psValues, lastpsValues, R, L)
+    if math.isnan(lin_disp) == True:
+        print("In Nan loop")
+        print(lin_disp)
+        lin_disp = 0
+    if math.isnan(ang_disp) == True:
+        ang_disp = 0
+    #last_pose = get_robot_pose(lin_disp, ang_disp,robot_pose)"""
+    
     while robot.step(timestep) != -1:
         # key controls
         vel_left, vel_right = velFromKeyboard(keyboard)
         leftMotor.setVelocity(vel_left)
         rightMotor.setVelocity(vel_right)
 
+        """# .................Task4
+        # read encoder values 
+        psValues1 = [0,0]
+        psValues1[0] = leftSensor.getValue()
+        psValues1[1] = rightSensor.getValue()
+        #print(psValues[0])
+        
+        if math.isnan(psValues[0]) == True:
+            psValues[0] = 0
+        if math.isnan(psValues[1]) == True:
+            psValues[1] = 0
+        # Compute linear and angular displacement of the robot 
+        [lin_disp1, ang_disp1] = get_robot_displacement(psValues1, lastpsValues, R, L)
+        if math.isnan(lin_disp1) == True:
+            print("In Nan loop")
+            print(lin_disp)
+            lin_disp1 = 0
+        if math.isnan(ang_disp1) == True:
+            ang_disp1 = 0
+        #print("lin_disp")
+        #print(leftSensor.getValue())
+        # Compute robot new position
+        robot_pose = get_robot_pose(lin_disp1, ang_disp1,last_pose)"""
+
+
         # read robot pose and compute difference to last used pose
         curr_pose = get_curr_pose(trans_field, rot_field)
-        trans_delta, theta_delta = get_pose_delta(last_pose, curr_pose)
+        #print(curr_pose)
+        #print(robot_pose)
 
+        trans_delta, theta_delta = get_pose_delta(last_pose, curr_pose)
+        #trans_delta, theta_delta = get_pose_delta(last_pose, robot_pose)
+        print(trans_delta)
+        
+        #odometry = get_odometry(last_pose, robot_pose)
+        #last_pose = robot_pose
+        #for i in range(2):
+         # lastpsValues[i]=psValues[i]  
+        
         # skip until translation change is big enough
         if (trans_delta < trans_thr):
+            print("Not Updating")
             continue
     
         # get current lidar measurements
@@ -546,11 +649,14 @@ def main():
         scan.reverse()
 
         # compute odometry from pose difference
+        #replacing curr_pose and last_pose with pose calculated from sensor readings
         odometry = get_odometry(last_pose, curr_pose)
         last_pose = curr_pose
+        
+        
 
         # insert random particles
-        #particles = add_random_particles(particles, weights, map_limits)
+        particles = add_random_particles(particles, weights, map_limits)
 
         # predict particles by sampling from motion model with odometry info
         particles = sample_motion_model(odometry, particles)

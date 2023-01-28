@@ -1,0 +1,84 @@
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/adept/pioneer3/protos/Pioneer3dx.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/devices/sick/protos/SickLms291.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/obstacles/protos/OilBarrel.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5792086739678328 0.5767789732409088 0.5760584415036273 2.0999665046981657
+  position 1.4506866680993404 0.15545406182901106 30.469824658562548
+}
+TexturedBackground {
+  luminosity 0
+  skybox FALSE
+}
+TexturedBackgroundLight {
+  castShadows FALSE
+}
+DEF RectangleArena RectangleArena {
+  floorSize 13 10
+  floorTileSize 2 2
+  wallHeight 0.5
+}
+DEF Pioneer3dx Pioneer3dx {
+  translation -2.05998 -1.42191 0.0975
+  rotation 0 0 1 2.618
+  controller "slam_controller"
+  supervisor TRUE
+  extensionSlot [
+    SickLms291 {
+      translation 0 0 0.21
+      noise 0.1
+      resolution 11
+    }
+  ]
+}
+DEF Obs_1 OilBarrel {
+  translation -3.3046 -3.53155 0.44
+  name "oil barrel_1"
+}
+DEF Obs_2 OilBarrel {
+  translation -4.55226 -1.06251 0.44
+  rotation 0 0 1 -0.523595307179586
+  name "oil barrel_2"
+}
+DEF Obs_4 OilBarrel {
+  translation 0.596471 3.21544 0.44
+  rotation 0 0 -1 0.523595
+  name "oil barrel_4"
+}
+DEF Obs_5 OilBarrel {
+  translation 3.75375 2.78019 0.44
+  rotation 0 0 1 -0.523595307179586
+  name "oil barrel_5"
+}
+DEF Obs_6 OilBarrel {
+  translation 4.52303 0.124555 0.44
+  rotation 0 0 1 -0.523595307179586
+  name "oil barrel_6"
+}
+DEF Obs_7 OilBarrel {
+  translation 3.74234 -2.64368 0.44
+  rotation 0 0 1 -0.523595307179586
+  name "oil barrel_7"
+}
+DEF Obs_8 OilBarrel {
+  translation 0.536488 -2.46661 0.44
+  rotation 0 0 1 -0.523595307179586
+  name "oil barrel_8"
+}
+DEF Obs_9 OilBarrel {
+  translation 0.516221 0.00788357 0.44
+  rotation 0 0 -1 0.261796
+  name "oil barrel_9"
+}
+DEF Obs_3 OilBarrel {
+  translation -2.15444 1.49612 0.44
+  rotation 0 0 1 -0.523595307179586
+  name "oil barrel_3"
+}
